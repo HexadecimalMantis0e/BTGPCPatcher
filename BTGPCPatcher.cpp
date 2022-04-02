@@ -50,6 +50,26 @@ class DisableIntelWads : public Patch {
         }
 };
 
+class SwapCpuVendors : public Patch {
+    public:
+        SwapCpuVendors(std::FILE *filePointer, std::string patchName) : Patch(filePointer, patchName) {}
+        void apply() {
+            /* Creator: Hexadecimal Mantis */
+            std::fseek(fp, 0x000C5DAC, SEEK_SET); // 0x004C5DAC
+            std::vector<unsigned char> patchBytes {
+                0x47, 0x65, 0x6E, 0x75, // dword_4C5DAC     dd 756E6547h
+                0x69, 0x6E, 0x65, 0x49, // dword_4C5DB0     dd 49656E69h
+                0x6E, 0x74, 0x65, 0x6C, // dword_4C5DB4     dd 6C65746Eh
+                0x00,                   // byte_4C5DB8      db 0
+                0x00, 0x00, 0x00,       //                  align 4
+                0x41, 0x75, 0x74, 0x68, // dword_4C5DBC     dd 68747541h
+                0x65, 0x6E, 0x74, 0x69, // dword_4C5DC0     dd 69746E65h
+                0x63, 0x41, 0x4D, 0x44  // dword_4C5DC4     dd 444D4163h
+            };
+            std::fwrite(&patchBytes[0], sizeof(std::vector<unsigned char>::value_type), patchBytes.size(), fp);
+        }
+};
+
 void usage() {
     std::cout << "Usage: BTGPCPatcher -e executable [-p [patch] ...]" << std::endl;
     std::cout << "Arguments:" << std::endl;
@@ -103,6 +123,7 @@ int main(int argc, char *argv[]) {
 
         std::vector<Patch *> patches {
             new DisableIntelWads(f0, "DisableIntelWads"),
+            new SwapCpuVendors(f0, "SwapCpuVendors")
         };
 
         if (argc > 3) {
