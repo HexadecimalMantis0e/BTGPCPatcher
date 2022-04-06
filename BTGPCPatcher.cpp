@@ -70,6 +70,19 @@ class SwapCpuVendors : public Patch {
         }
 };
 
+class EnableCoordinates : public Patch {
+    public:
+        EnableCoordinates(std::FILE *filePointer, std::string patchName) : Patch(filePointer, patchName) {}
+        void apply() {
+            /* Creator: Hexadecimal Mantis */
+            std::fseek(fp, 0x00055B23, SEEK_SET); // 0x00455B23
+            std::vector<unsigned char> patchBytes {
+                0x0F, 0x84, 0xA2, 0x00, 0x00, 0x00  // jz      loc_455BCB
+            };
+            std::fwrite(&patchBytes[0], sizeof(std::vector<unsigned char>::value_type), patchBytes.size(), fp);
+        }
+};
+
 void usage() {
     std::cout << "Usage: BTGPCPatcher -e executable [-p [patch] ...]" << std::endl;
     std::cout << "Arguments:" << std::endl;
@@ -123,7 +136,8 @@ int main(int argc, char *argv[]) {
 
         std::vector<Patch *> patches {
             new DisableIntelWads(f0, "DisableIntelWads"),
-            new SwapCpuVendors(f0, "SwapCpuVendors")
+            new SwapCpuVendors(f0, "SwapCpuVendors"),
+            new EnableCoordinates(f0, "EnableCoordinates")
         };
 
         if (argc > 3) {
