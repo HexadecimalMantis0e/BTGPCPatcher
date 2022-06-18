@@ -4,7 +4,7 @@ EXE=BTGPCPatcher
 
 all: $(EXE)
 
-$(EXE): BTGPCPatcher.cpp
+$(EXE): BTGPCPatcher.cpp Patch.cpp Util.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^ -static
 
 clean:
