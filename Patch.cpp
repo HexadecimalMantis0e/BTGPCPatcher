@@ -59,7 +59,18 @@ void EnableCoordinates::apply() {
     /* Creator: Hexadecimal Mantis */
     fs.seekp(0x00055B23, std::ios::beg); // 0x00455B23
     std::vector<unsigned char> patchBytes {
-        0x0F, 0x84, 0xA2, 0x00, 0x00, 0x00  // jz     loc_455BCB
+        0x0F, 0x84, 0xA2, 0x00, 0x00, 0x00  // jz      loc_455BCB
+    };
+    fs.write(reinterpret_cast<const char *>(patchBytes.data()), patchBytes.size());
+}
+
+EnableMilliseconds::EnableMilliseconds(std::fstream &fileStream, const std::string &patchName) : Patch(fileStream, patchName) {}
+
+void EnableMilliseconds::apply() {
+    /* Creator: Hexadecimal Mantis */
+    fs.seekp(0x00057617, std::ios::beg); // 0x00457617
+    std::vector<unsigned char> patchBytes {
+        0x0F, 0x84, 0xA6, 0x00, 0x00, 0x00  // jz      loc_4576C3
     };
     fs.write(reinterpret_cast<const char *>(patchBytes.data()), patchBytes.size());
 }

@@ -38,4 +38,10 @@ class EnableCoordinates : public Patch {
         void apply();
 };
 
+class EnableMilliseconds : public Patch {
+    public:
+        EnableMilliseconds(std::fstream &fileStream, const std::string &patchName);
+        void apply();
+};
+
 #endif

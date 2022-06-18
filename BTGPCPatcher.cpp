@@ -11,8 +11,9 @@ int main(int argc, char *argv[]) {
     DisableIntelWads disableIntelWads(fs, "DisableIntelWads");
     SwapCpuVendors swapCpuVendors(fs, "SwapCpuVendors");
     EnableCoordinates enableCoordinates(fs, "EnableCoordinates");
+    EnableMilliseconds enableMilliseconds(fs, "EnableMilliseconds");
 
-    std::vector<Patch *> patches { &disableIntelWads, &swapCpuVendors, &enableCoordinates };
+    std::vector<Patch *> patches { &disableIntelWads, &swapCpuVendors, &enableCoordinates, &enableMilliseconds };
 
     if (argc < 2) {
         usage(patches);
